@@ -71,14 +71,17 @@ class _HomePageState extends State<HomePage> {
                                               newValue;
                                         });
                                       }),
-                                  Text(
-                                    todos.elementAt(index).title,
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        decoration:
-                                            todos.elementAt(index).isdone
-                                                ? TextDecoration.lineThrough
-                                                : null),
+                                  Expanded(
+                                    child: Text(
+                                      todos.elementAt(index).title,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          decoration:
+                                              todos.elementAt(index).isdone
+                                                  ? TextDecoration.lineThrough
+                                                  : null),
+                                    ),
                                   )
                                 ],
                               ),
