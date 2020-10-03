@@ -27,10 +27,14 @@ flutter run
 * 🥳 Slide task right or left to dismis it 🥳
 * 🌈 Rainbow colors 🌈  
 
-## TODO
+## TODO 🏹
 
 * add firebase support
 * add localstorage
+
+## Contributors 🔥
+
+[Bibhukiju](https://github.com/Bibhukiju) - made ui better
 
 ## Getting Started
 
