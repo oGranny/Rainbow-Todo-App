@@ -1,84 +1,96 @@
-import 'package:todo_app/screens/addTask.dart';
-import 'package:todo_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app/constants.dart';
+import 'package:todo_app/models.dart/todomodel.dart';
+import 'package:todo_app/screens/addTask.dart';
 
-List tasks = <String>[
-  "hello 👋",
-  "This task is done",
-  "You can also slide the task left or right to dismis it 😉"
-];
-
-class MyHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: secondaryColor,
-        title: Text(
-          "Todo",
-          style: TextStyle(color: Colors.black),
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(50),
+                        bottomRight: Radius.circular(50))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(),
+                    Text(
+                      "Todo List",
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    ),
+                    IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => AddTask())),
+                        color: Colors.white)
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+                flex: 4,
+                child: Container(
+                  child: ListView.builder(
+                      itemCount: todos.length,
+                      itemBuilder: (context, index) {
+                        return Dismissible(
+                            key: Key(todos[index].toString()),
+                            onDismissed: (direction) {
+                              setState(() {
+                                todos.removeAt(index);
+                              });
+                            },
+                            child: Container(
+                              height: 100,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: todos.elementAt(index).bgColor,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                      value: todos.elementAt(index).isdone,
+                                      activeColor: Colors.green,
+                                      onChanged: (bool newValue) {
+                                        setState(() {
+                                          todos.elementAt(index).isdone =
+                                              newValue;
+                                        });
+                                      }),
+                                  Expanded(
+                                    child: Text(
+                                      todos.elementAt(index).title,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          decoration:
+                                              todos.elementAt(index).isdone
+                                                  ? TextDecoration.lineThrough
+                                                  : null),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ));
+                      }),
+                ))
+          ],
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              setState(() {
-                // tasks.add("hello");
-              });
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => AddTask()));
-            },
-            tooltip: "add item",
-            color: Colors.black,
-          ),
-          IconButton(
-            icon: Icon(Icons.delete_forever),
-            onPressed: () => {
-              setState(() {
-                tasks = [];
-              })
-            },
-            color: Colors.black,
-            tooltip: "delete all items",
-          )
-        ],
       ),
-      body: Body(),
-    );
-  }
-}
-
-class Body extends StatefulWidget {
-  @override
-  _BodyState createState() => _BodyState();
-}
-
-class _BodyState extends State<Body> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: tasks.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Dismissible(
-          key: Key(tasks[index].toString()),
-          child: BuildTodo(
-            index: index,
-            task: "${tasks[index]}",
-          ),
-          onDismissed: (direction) {
-            // i--;
-            setState(() {
-              tasks.removeAt(index);
-            });
-          },
-        );
-      },
     );
   }
 }

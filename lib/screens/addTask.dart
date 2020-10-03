@@ -1,7 +1,7 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'home.dart';
-
-// int i = 0;
+import 'package:todo_app/models.dart/todomodel.dart';
+import 'package:todo_app/screens/home.dart';
 
 class AddTask extends StatefulWidget {
   @override
@@ -13,10 +13,12 @@ class _AddTaskState extends State<AddTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Add Task",
-        ),
-      ),
+          elevation: 0,
+          title: Text(
+            "Add Task",
+          ),
+          centerTitle: true,
+          backgroundColor: Theme.of(context).primaryColor),
       body: Body(),
     );
   }
@@ -28,55 +30,55 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  // ignore: unused_field
-  String _task;
-  final TextEditingController controller = TextEditingController();
+  TextEditingController task = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Center(
-                  child: Text("Try to keep your task smaller and to the point",
-                      style: TextStyle(fontSize: 20))),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              decoration: InputDecoration(
-                // hintText: "What Do People Call You?",
-                labelText: "task",
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.greenAccent,
-                    ),
-                    borderRadius: BorderRadius.circular(20)),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Text(
+                "Add Your Task",
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor, fontSize: 25),
               ),
-              enabled: true,
-              onChanged: (value) => _task = value,
-              controller: controller,
             ),
           ),
-          FlatButton(
-            onPressed: () {
-              setState(() {
-                tasks.add(_task.toString());
-              });
-              // Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyHomePage()));
-              // i++;
-            },
-            child: Text(
-              "Add",
-              style: TextStyle(fontSize: 17.5),
+          Expanded(
+            flex: 3,
+            child: Center(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: TextField(
+                  controller: task,
+                  maxLines: 10,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  )),
+                ),
+              ),
             ),
-            color: Colors.greenAccent,
-          )
+          ),
+          FlatButton.icon(
+              color: Colors.green,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
+              onPressed: () {
+                todos.add(Todo(
+                    title: task.text,
+                    isdone: false,
+                    bgColor: Color((Random().nextDouble() * 0xFFFFFF).toInt())
+                        .withOpacity(1.0)));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => HomePage()));
+                print(todos.elementAt(todos.length - 1).title);
+              },
+              icon: Icon(Icons.add),
+              label: Text("Add"))
         ],
       ),
     );
